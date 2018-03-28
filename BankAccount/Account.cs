@@ -38,7 +38,7 @@ namespace BankAccount
         {
             Console.Write($"Please confirm the amount you are taking out: ");
             string takingOut = Console.ReadLine();
-            if (decimal.TryParse(takingOut, out decimal amount))
+            if (decimal.TryParse(takingOut, out decimal amount) && amount > 0)
             {
                 if (Balance > amount)
                 {
@@ -68,7 +68,7 @@ namespace BankAccount
 
         public bool WithdrawFunds(decimal withdrawalAmount)
         {
-                if (Balance > withdrawalAmount)
+                if (Balance > withdrawalAmount && withdrawalAmount > 0)
                 {
                     Balance = Balance - withdrawalAmount;
                     return true;
@@ -87,7 +87,7 @@ namespace BankAccount
         {
             Console.Write($"Please confirm the amount you are paying in: ");
             string payingIn = Console.ReadLine();
-            if (decimal.TryParse(payingIn, out decimal amount))
+            if (decimal.TryParse(payingIn, out decimal amount) && amount > 0)
             {
                 Balance = Balance + amount;
                 Console.WriteLine($"Deposit successful. Account balance is now: {CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol}{Balance}.");
@@ -105,8 +105,19 @@ namespace BankAccount
 
         public bool DepositFunds(decimal depositAmount)
         {
+            if (depositAmount > 0)
+            {
                 Balance = Balance + depositAmount;
                 return true;
+            }
+
+            else
+            {
+                Console.WriteLine("Unable to process deposit. Please try again.");
+                AccountsSummary.AccountsDisplay(AccountHolder);
+                return false;
+            }
+                
         }
 
         public bool TransferFunds()
